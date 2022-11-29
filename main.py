@@ -26,8 +26,8 @@ def recvall(sock, n):
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as suck:
     suck.connect((host, port))
     count = 0
-    
-    while(count != 10):
+    beat = b"nope"
+    while(beat != b"yep"):
         suck.send(b"get")
         bts = recvall(suck, packet_size)    
         rows, cols = bts[:2]  
@@ -49,13 +49,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as suck:
         pos2 = regions[1]["centroid"]
 
         result = np.round(np.sqrt((pos1[0] - pos2[0])**2 + (pos1[1] - pos2[1])**2), 1)
-        print(result)
+        #print(result)
         suck.send(f"{result}".encode())
         validation = suck.recv(20)
         print(validation)
         
-        if(validation == b"yep"):
-            count += 1
+        suck.send(b"beat")
+        beat = suck.recv(20)
         
             
 
